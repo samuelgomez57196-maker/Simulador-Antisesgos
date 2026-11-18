@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101a19">
+  <meta name="description" content="Simulador educativo de apuestas, inversiones, pirámides y compras impulsivas.">
+  <title>CLARO — Decide con números</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="shell topbar">
+    <a class="brand" href="#" aria-label="CLARO, inicio"><span class="brand-mark">C</span> CLARO</a>
+    <span class="topbar-note">Herramientas para decidir con cabeza fría</span>
+  </header>
+
+  <main class="shell">
+    <section class="hero" aria-labelledby="main-title">
+      <div>
+        <div class="eyebrow">Educación financiera · laboratorio interactivo</div>
+        <h1 id="main-title">Que la emoción<br>no haga <span>las cuentas.</span></h1>
+        <p class="hero-copy">Prueba una apuesta, una promesa de inversión o una compra antes de poner tu dinero. Entiende los números; decide tú.</p>
+      </div>
+      <aside class="hero-note">
+        <strong>Una pausa cambia la decisión.</strong>
+        Una racha no predice el próximo resultado. Una promesa tampoco sustituye un modelo de negocio verificable.
+      </aside>
+    </section>
+
+    <section class="workspace" aria-label="Simuladores">
+      <nav class="sidebar" role="tablist" aria-label="Elige un simulador">
+        <button class="tab" id="tab-math" role="tab" aria-selected="true" aria-controls="panel-math" data-panel="panel-math"><span class="tab-number">01</span> Apuesta o inversión</button>
+        <button class="tab" id="tab-scam" role="tab" aria-selected="false" aria-controls="panel-scam" data-panel="panel-scam"><span class="tab-number">02</span> Alerta de pirámide</button>
+        <button class="tab" id="tab-buy" role="tab" aria-selected="false" aria-controls="panel-buy" data-panel="panel-buy"><span class="tab-number">03</span> Compra impulsiva</button>
+        <div class="sidebar-tip"><b>Regla CLARO</b><br>Calcula. Lee las condiciones. Analiza los riesgos. Revisa con calma. Opina con evidencia.</div>
+      </nav>
+
+      <section class="panel active" id="panel-math" role="tabpanel" aria-labelledby="tab-math">
+        <div class="panel-head">
+          <div>
+            <h2>¿Cuánto esperas ganar, de verdad?</h2>
+            <p>La esperanza matemática pondera cada resultado por su probabilidad. Es un promedio teórico, no una garantía para una jugada.</p>
+          </div>
+          <span class="tag">Probabilidad × resultado</span>
+        </div>
+        <div class="calc-grid">
+          <form class="fields" id="math-form">
+            <div class="field">
+              <label for="scenario">Tipo de decisión</label>
+              <select id="scenario">
+                <option value="bet">Apuesta · cuota decimal</option>
+                <option value="investment">Inversión · dos escenarios</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="stake">Monto que arriesgas (en tu moneda)</label>
+              <input id="stake" type="number" min="0.01" step="any" value="100" inputmode="decimal">
+            </div>
+            <div class="field bet-field" id="bet-odds-field">
+              <label for="odds">Cuota decimal</label>
+              <input id="odds" type="number" min="1.01" step="0.01" value="2" inputmode="decimal">
+              <small>Ejemplo: cuota 2.00 devuelve 2 por cada 1 apostado, incluida la apuesta.</small>
+            </div>
+            <div class="field investment-field" id="investment-gain-field" hidden>
+              <label for="gain">Ganancia si sale bien (%)</label>
+              <input id="gain" type="number" min="0" step="any" value="30" inputmode="decimal">
+            </div>
+            <div class="field investment-field" id="investment-loss-field" hidden>
+              <label for="loss">Pérdida si sale mal (%)</label>
+              <input id="loss" type="number" min="0" step="any" value="100" inputmode="decimal">
+            </div>
+            <div class="field">
+              <label for="probability" id="probability-label">Tu probabilidad estimada de ganar (%)</label>
+              <input id="probability" type="number" min="0" max="100" step="1" value="50" inputmode="decimal">
+              <small id="probability-help">Usa una estimación basada en datos, no solo en intuición o en una racha.</small>
+            </div>
+          </form>
+          <div class="result-card" aria-live="polite">
+            <div class="result-label">Ganancia/pérdida esperada por intento</div>
+            <div class="result-value" id="expected-value">—</div>
+            <p class="result-copy" id="expected-summary">—</p>
+            <div class="result-divider"></div>
+            <div class="metric-row"><span>Probabilidad de equilibrio</span><strong id="breakeven">—</strong></div>
+            <div class="metric-row"><span>Escenario favorable</span><strong id="upside">—</strong></div>
+            <div class="metric-row"><span>Escenario desfavorable</span><strong id="downside">—</strong></div>
+            <div class="math-note" id="formula-note">—</div>
+          </div>
+        </div>
+        <div class="streak">
+          <div class="streak-head">
+            <h3>La racha no tiene memoria</h3>
+            <span class="tag">Ensayo mental</span>
+          </div>
+          <div class="two-fields">
+            <div class="field">
+              <label for="streak-probability">Probabilidad de ganar cada vez (%)</label>
+              <input id="streak-probability" type="number" min="1" max="99" value="50" inputmode="decimal">
+            </div>
+            <div class="field">
+              <label for="streak-length">Victorias seguidas que observaste</label>
+              <input id="streak-length" type="number" min="2" max="20" value="5" inputmode="numeric">
+            </div>
+          </div>
+          <div class="coin-row" id="coin-row" aria-hidden="true"></div>
+          <p class="streak-result" id="streak-result" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-scam" role="tabpanel" aria-labelledby="tab-scam" hidden>
+        <div class="panel-head">
+          <div>
+            <h2>¿La ganancia depende de reclutar?</h2>
+            <p>Marca las señales que aparecen en la oferta. Es una lista de alerta para iniciar una revisión, no un dictamen legal ni una prueba automática de fraude.</p>
+          </div>
+          <span class="tag">5 señales de alerta</span>
+        </div>
+        <div class="risk-grid">
+          <div class="checklist" id="scam-checklist">
+            <label class="check-item"><input type="checkbox" class="scam-flag"><span>Para ganar, debo invitar a más personas.<small>El pago depende de nuevos participantes, no de ventas a clientes reales.</small></span></label>
+            <label class="check-item"><input type="checkbox" class="scam-flag"><span>Me cobran una cuota de entrada o una compra inicial grande.<small>Revisa si el producto tiene valor y demanda por sí mismo.</small></span></label>
+            <label class="check-item"><input type="checkbox" class="scam-flag"><span>Prometen ganancias fijas, rápidas o “sin riesgo”.<small>Toda inversión tiene riesgos; pide cifras y condiciones por escrito.</small></span></label>
+            <label class="check-item"><input type="checkbox" class="scam-flag"><span>No explican con claridad de dónde sale el dinero.<small>Una presentación atractiva no reemplaza estados financieros verificables.</small></span></label>
+            <label class="check-item"><input type="checkbox" class="scam-flag"><span>Me apuran con una oferta que “vence hoy”.<small>La presión para decidir puede impedir que consultes fuentes independientes.</small></span></label>
+          </div>
+          <aside class="risk-box" aria-live="polite">
+            <h3>Lectura inicial</h3>
+            <div class="risk-status" id="risk-status">Sin señales marcadas</div>
+            <p id="risk-advice">Marca lo que describa la propuesta. Después verifica la empresa, el producto y las reglas de pago por fuera de sus propios canales.</p>
+            <p class="risk-count" id="risk-count">0 de 5 señales</p>
+          </aside>
+          <div class="pyramid-math">
+            <div class="fields">
+              <div class="field">
+                <label for="recruits">Personas que cada participante debe reclutar</label>
+                <input id="recruits" type="number" min="2" max="10" step="1" value="2" inputmode="numeric">
+              </div>
+              <div class="field">
+                <label for="levels">Niveles de reclutamiento</label>
+                <input id="levels" type="number" min="1" max="10" step="1" value="8" inputmode="numeric">
+              </div>
+            </div>
+            <div class="pyramid-result" aria-live="polite">
+              <strong id="pyramid-total">—</strong>
+              <span id="pyramid-description">personas necesarias en total, contando a quien inicia.</span>
+              <p class="math-note" id="pyramid-formula">—</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-buy" role="tabpanel" aria-labelledby="tab-buy" hidden>
+        <div class="panel-head">
+          <div>
+            <h2>Antes de pagar: pausa y comprueba</h2>
+            <p>La urgencia, una emoción fuerte y una compra fuera del presupuesto son razones para detenerse. Este ejercicio no sustituye tu criterio.</p>
+          </div>
+          <span class="tag">Pausa de 24 horas</span>
+        </div>
+        <div class="calc-grid">
+          <form class="fields" id="buy-form">
+            <div class="field">
+              <label for="price">Precio del producto (en tu moneda)</label>
+              <input id="price" type="number" min="0" step="any" value="120" inputmode="decimal">
+            </div>
+            <div class="field">
+              <label for="budget">Dinero disponible después de gastos y ahorro</label>
+              <input id="budget" type="number" min="0" step="any" value="200" inputmode="decimal">
+              <small>Cuenta solo el dinero realmente libre, no el límite de tu tarjeta o un crédito.</small>
+            </div>
+            <div class="field">
+              <span class="field-label">Contesta con honestidad</span>
+              <div class="checklist">
+                <label class="check-item"><input type="checkbox" class="impulse-flag"><span>¿La compra no estaba planeada?</span></label>
+                <label class="check-item"><input type="checkbox" class="impulse-flag"><span>¿Decido bajo una emoción intensa (ansiedad, euforia o enojo)?</span></label>
+                <label class="check-item"><input type="checkbox" class="impulse-flag"><span>¿Me presionan con un contador, cupos o descuento que termina ya?</span></label>
+              </div>
+            </div>
+          </form>
+          <div class="result-card" aria-live="polite">
+            <div class="result-label">Nivel de riesgo de compra impulsiva</div>
+            <div class="risk-status" id="impulse-status">—</div>
+            <p class="result-copy" id="impulse-advice">—</p>
+            <div class="result-divider"></div>
+            <div class="metric-row"><span>Señales activas</span><strong id="impulse-count">0 de 3</strong></div>
+            <div class="affordability" id="budget-advice">—</div>
+            <div class="math-note"><b>Prueba de pausa:</b> cierra la página, espera 24 horas y compara al menos dos opciones. Si la oferta desaparece por esperar, eso también es información.</div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="evidence" aria-labelledby="evidence-title">
+      <h3 id="evidence-title">De la evidencia al ejercicio</h3>
+      <p class="evidence-intro">Lecturas para profundizar en decisiones bajo riesgo, percepción de rachas y esquemas piramidales. Las herramientas ilustran conceptos: no estiman probabilidades reales ni identifican por sí solas una estafa.</p>
+      <div class="papers">
+        <article class="paper">
+          <a href="https://doi.org/10.2307/1914185" target="_blank" rel="noreferrer">Kahneman &amp; Tversky (1979) · Prospect Theory</a>
+          <p>Econometrica, 47(2), 263–291. Marco clásico para entender cómo se valoran ganancias y pérdidas bajo riesgo.</p>
+        </article>
+        <article class="paper">
+          <a href="https://doi.org/10.1037/h0031322" target="_blank" rel="noreferrer">Tversky &amp; Kahneman (1971) · Belief in the Law of Small Numbers</a>
+          <p>Psychological Bulletin, 76(2), 105–110. Sobre intuiciones erróneas al inferir patrones a partir de pocas observaciones.</p>
+        </article>
+        <article class="paper">
+          <a href="https://doi.org/10.1016/0010-0285(85)90010-6" target="_blank" rel="noreferrer">Gilovich, Vallone &amp; Tversky (1985) · The Hot Hand in Basketball</a>
+          <p>Cognitive Psychology, 17(3), 295–314. Estudio clásico sobre la percepción de rachas deportivas.</p>
+        </article>
+        <article class="paper">
+          <a href="https://doi.org/10.3982/ECTA14943" target="_blank" rel="noreferrer">Miller &amp; Sanjurjo (2018) · Surprised by the Hot Hand Fallacy?</a>
+          <p>Econometrica, 86(6), 2019–2047. Reexamina el sesgo de selección en la evidencia sobre la “mano caliente”.</p>
+        </article>
+        <article class="paper">
+          <a href="https://doi.org/10.1016/j.socec.2019.02.011" target="_blank" rel="noreferrer">Bosley et al. (2019) · Decision-making and vulnerability in a pyramid scheme fraud</a>
+          <p>Journal of Behavioral and Experimental Economics, 80, 1–13. Decisiones y vulnerabilidad frente a un fraude piramidal.</p>
+        </article>
+        <article class="paper">
+          <a href="https://doi.org/10.3982/TE4890" target="_blank" rel="noreferrer">Antler (2023) · Multilevel marketing: Pyramid-shaped schemes or exploitative scams</a>
+          <p>Theoretical Economics, 18(2), 633–667. Analiza estructuras de compensación y los incentivos de reclutamiento.</p>
+        </article>
+      </div>
+      <div class="search-links" aria-label="Búsquedas de literatura">
+        <a href="https://scholar.google.com/scholar?q=prospect+theory+loss+aversion+gambler%27s+fallacy+financial+fraud+pyramid+schemes" target="_blank" rel="noreferrer">Explorar la consulta en Google Scholar ↗</a>
+        <a href="https://elicit.com/search?q=behavioral%20economics%20loss%20aversion%20gambler%27s%20fallacy%20financial%20fraud%20pyramid%20schemes" target="_blank" rel="noreferrer">Explorar la consulta en Elicit ↗</a>
+      </div>
+      <p class="method-note">Carl Sagan popularizó herramientas de escepticismo científico; el estudio deportivo clásico citado aquí es de Gilovich, Vallone y Tversky, no de Sagan. El ejemplo de rachas supone ensayos independientes con probabilidad constante: en deportes reales, los resultados pueden depender de habilidades, contexto y selección de datos.</p>
+    </section>
+  </main>
+
+  <footer class="shell">
+    <span>CLARO · Prototipo educativo</span>
+    <span>No es asesoría financiera, legal ni una predicción de resultados.</span>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
